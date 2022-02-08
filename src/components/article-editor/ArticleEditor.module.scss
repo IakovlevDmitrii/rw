@@ -1,0 +1,79 @@
+@import '../app/styles/form.module';
+
+.tags {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(28px, auto);
+
+  @media only screen and ($screen-sm) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.tagItemsContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 0.75rem;
+}
+
+.tagItem {
+  display: flex;
+  margin-bottom: 5px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  input {
+    margin: 0;
+  }
+}
+
+.tagInput {
+  width: 100%;
+  max-width: 300px;
+  margin-right: 0.75rem;
+}
+
+.deleteTagButton {
+  width: 120px;
+  height: 2rem;
+  margin-left: 1rem;
+  border: 1px solid $color__4;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: $color__4;
+
+  &:hover,
+  &:active {
+    cursor: pointer;
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 0 0.75rem;
+}
+
+.addTagButton {
+  width: 136px;
+  height: 2rem;
+  border: 1px solid $brand_primary__2;
+  border-radius: 4px;
+  color: $brand_primary__2;
+  font-size: 0.75rem;
+
+  &:hover,
+  &:active {
+    cursor: pointer;
+  }
+
+  @media only screen and ($screen-sm) {
+    margin-left: 0.75rem;
+  }
+}
+
+.formButton {
+  max-width: 320px;
+}

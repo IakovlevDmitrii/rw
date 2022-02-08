@@ -1,0 +1,89 @@
+/* ---------- colors ---------- */
+
+$brand_primary__1: rgba(255, 255, 255, 1); //#ffffff
+$brand_primary__2: rgba(24, 144, 255, 1);  //#1890ff
+$brand_primary__3: rgba(82, 196, 26, 1);   //#52c41a
+$brand_primary__4: rgba(229, 229, 229, 1); //#e5e5e5
+$brand_primary__5: rgba(38, 38, 38, 1);    //#262626
+
+$color__1: rgba(217, 217, 217, 1);         //#d9d9d9
+$color__2: rgba(232, 232, 232, 1);         //#e8e8e8
+$color__3: rgba(191, 191, 191, 1);         //#bfbfbf
+$color__4: rgba(245, 34, 45, 1);           //#F5222D
+$color__5: rgba(13, 107, 255, 1);          //#0d6bff
+
+/* ---------- screen sizes ---------- */
+
+$screen-sm: 'min-width: 576px';
+$screen-md: 'min-width: 768px';
+$screen-lg: 'min-width: 992px';
+$screen-xl: 'min-width: 1200px';
+$screen-xxl: 'min-width: 1400px';
+
+/* ---------- rem ---------- */
+
+html {
+  font-size: 12px;
+  @media only screen and ($screen-sm) {font-size: 14px;}
+  @media only screen and ($screen-md) {font-size: 16px;}
+  @media only screen and ($screen-lg) {font-size: 18px;}
+  @media only screen and ($screen-xl) {font-size: 20px;}
+  @media only screen and ($screen-xxl) {font-size: 22px;}
+}
+
+body {
+  color: $brand_primary__5;
+  font: {
+    family: 'InterRegular', serif;
+    weight: 400;}
+  line-height: 1.2rem;
+  letter-spacing: 0;
+}
+
+/* ---------- layout ---------- */
+
+%flex_center{
+  display: flex;
+  align-items: center;
+}
+
+%flex_center__full {
+  @extend %flex_center;
+  justify-content: center;
+}
+
+/* ---------- blocks ---------- */
+
+%container {
+  margin-right: auto;
+  margin-left: auto;
+  @media only screen and ($screen-md) {width: 750px;}
+  @media only screen and ($screen-lg) {width: 940px;}
+}
+
+%container_border {
+  box-shadow: 0 0.3rem 1rem 0 rgba(0, 0, 0, 0.15);
+  border-radius: 0.2rem;
+}
+
+%content {
+  background-color: $brand_primary__1;
+  border-radius: 0.2rem;
+}
+
+%auth_button {
+  @extend %flex_center__full;
+  height: 2.5rem;
+  padding: {
+    left: 0.5rem;
+    right: 0.5rem;};
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+
+  &Active,
+  &:hover {
+    color: $brand_primary__3;
+    border-color: $brand_primary__3;
+  }
+}

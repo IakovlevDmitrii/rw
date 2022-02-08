@@ -1,0 +1,55 @@
+@import '../app/styles/const.module';
+@import '../app/styles/person-details.module';
+
+.header {
+   position: sticky;
+   z-index: 1;
+   top: 0;
+   background-color: $brand_primary__1;
+   box-shadow: 0 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.15);
+}
+
+.container {@extend %container;}
+
+.content {
+   @extend %flex_center;
+   padding: 0.75rem 1rem;
+   font-size: 1.2rem;
+
+   @media only screen and ($screen-sm) {padding: 0.75rem 0;}
+
+   a:nth-child(n+2) {
+      display: flex;
+      margin-right: 1rem;
+      &:last-child {margin-right: 0;}
+   }
+}
+
+.logo {
+   @extend %flex_center__full;
+   text-align: center;
+   height: 2.5rem;
+   padding-right: 0.5rem;
+   margin-right: auto;
+}
+
+.createArticleButton {
+   @extend %flex_center__full;
+   padding: 0.25rem 0.5rem;
+   text-align: center;
+   font-size: 1rem;
+   cursor: pointer;
+   border: 1px solid rgba(0, 0, 0, 0.75);
+   border-radius: 5px;
+
+   &:hover {
+      color: $brand_primary__3;
+      border-color: $brand_primary__3;
+   }
+}
+
+.authButton {
+   @extend %auth_button;
+
+   &Active {@extend %auth_buttonActive;}
+}

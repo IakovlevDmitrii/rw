@@ -1,0 +1,15 @@
+@import "const.module";
+@import "normalize.css";
+
+body {
+  background-color: $brand_primary__4;
+}
+
+body > div {
+  padding-bottom: 2rem;
+}
+
+.content {
+  min-width: 320px;
+  min-height: 100vh;
+}

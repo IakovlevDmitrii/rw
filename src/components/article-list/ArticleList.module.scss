@@ -1,0 +1,30 @@
+@import '../app/styles/const.module';
+
+.container {
+  @extend %container;
+}
+
+.content {
+  padding-top: 2rem;
+
+  article {
+    @extend %container_border;
+    margin-bottom: 2rem;
+  }
+}
+
+.pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+//.ant-pagination-item-active {
+//  background: $brand_primary__2;
+//  border-radius: 4px;
+//}
+//
+//.ant-pagination-item-active a,
+//.ant-pagination-item-active:focus-visible a,
+//.ant-pagination-item-active:hover a {
+//  color: $brand_primary__1;
+//}

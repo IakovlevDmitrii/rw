@@ -1,0 +1,10 @@
+.ant-pagination-item-active {
+    background: #1890ff;
+    border-radius: 4px;
+}
+
+.ant-pagination-item-active a,
+.ant-pagination-item-active:focus-visible a,
+.ant-pagination-item-active:hover a {
+    color: #ffffff;
+}
