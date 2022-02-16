@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useRouteMatch } from "react-router-dom";
 import PropTypes from 'prop-types';
-import ReactMarkdown from 'react-markdown';
 
+import Body from './body';
 import PersonDetails from "../person-details";
 
 import favoriteTrueImage from "./images/favorite-true.png";
@@ -97,11 +97,7 @@ const Article = ({ content, editable, onFavoriteArticle, onDeleteArticle }) => {
             </div>
          </div>
 
-         <div className={styles.body}>
-            <ReactMarkdown>
-               {body}
-            </ReactMarkdown>
-         </div>
+         <Body content={body} />
 
          <div className={styles.author}>
             <PersonDetails
