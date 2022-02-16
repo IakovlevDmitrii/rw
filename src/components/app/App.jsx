@@ -4,12 +4,14 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PrivateRoute from '../private-route';
 
+// components
 import Header from '../header';
 import ArticleList from "../article-list";
 import ArticlePage from "../pages/article-page";
 import NewArticlePage from '../pages/new-article-page';
 import { SignIn, SignUp, EditProfile } from '../authComponents';
 
+// css styles
 import styles from './styles/app.module.scss';
 
 const App = ({ isLoggedIn }) => (
@@ -54,7 +56,3 @@ const mapStateToProps = ({ authentication }) => ({
 });
 
 export default connect(mapStateToProps)(App);
-
-//             <Route path='/articles'>
-//                 <HomePage />
-//             </Route>
