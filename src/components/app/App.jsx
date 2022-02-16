@@ -2,15 +2,15 @@ import React from 'react';
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
-import Header from '../header';
-import NewArticlePage from '../pages/new-article-page';
-import { SignIn, SignUp, EditProfile } from '../authComponents';
 import PrivateRoute from '../private-route';
 
-import styles from './styles/app.module.scss';
-import ArticlePage from "../pages/article-page";
+import Header from '../header';
 import ArticleList from "../article-list";
+import ArticlePage from "../pages/article-page";
+import NewArticlePage from '../pages/new-article-page';
+import { SignIn, SignUp, EditProfile } from '../authComponents';
+
+import styles from './styles/app.module.scss';
 
 const App = ({ isLoggedIn }) => (
     <div className={styles.content}>
