@@ -6,8 +6,7 @@ import PrivateRoute from '../private-route';
 
 // components
 import Header from '../header';
-import ArticleList from "../article-list";
-import ArticlePage from "../pages/article-page";
+import HomePage from "../pages/home-page";
 import NewArticlePage from '../pages/new-article-page';
 import { SignIn, SignUp, EditProfile } from '../authComponents';
 
@@ -18,12 +17,8 @@ const App = ({ isLoggedIn }) => (
     <div className={styles.content}>
         <Header />
         <Switch>
-            <Route path='/articles/:slug'>
-                <ArticlePage />
-            </Route>
-
             <Route path='/articles'>
-                <ArticleList />
+                <HomePage />
             </Route>
 
             <PrivateRoute path='/new-article' auth={isLoggedIn}>
