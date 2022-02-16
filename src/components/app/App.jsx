@@ -4,7 +4,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Header from '../header';
-// import HomePage from '../pages/home-page';
 import NewArticlePage from '../pages/new-article-page';
 import { SignIn, SignUp, EditProfile } from '../authComponents';
 import PrivateRoute from '../private-route';
