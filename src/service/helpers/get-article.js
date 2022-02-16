@@ -9,7 +9,7 @@ const getArticle = async (segment) => {
   try {
     const response = await getResource(url);
     const { article } = response;
-    const { author, body, createdAt, description, favorited, favoritesCount, tagList, title } = article;
+    const { author, body = '', createdAt, description, favorited, favoritesCount, tagList, title } = article;
 
     return {
       author: {

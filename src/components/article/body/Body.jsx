@@ -15,11 +15,7 @@ const Body = ({ content }) => {
 };
 
 Body.propTypes = {
-    content: PropTypes.string
-}
-
-Body.defaultProps = {
-    content: ''
+    content: PropTypes.string.isRequired
 }
 
 export default Body;
