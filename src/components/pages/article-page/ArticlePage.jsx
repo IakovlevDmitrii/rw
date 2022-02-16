@@ -143,6 +143,7 @@ const ArticlePage = ({ username, token }) => {
                contentToChange={contentToChange}
             />
          </Route>
+
          <Route path={path}>
             {isArticleDeleted ? <Redirect to="/articles" /> :
             <section className={styles.section}>
@@ -155,18 +156,20 @@ const ArticlePage = ({ username, token }) => {
                   />
                </div>
             </section>
-               }
+           }
          </Route>
-
       </Switch>
    )
 };
 
 ArticlePage.propTypes = {
-   username: PropTypes.string.isRequired,
+   username: PropTypes.string,
    token: PropTypes.string.isRequired
 };
 
+ArticlePage.defaultProps = {
+    username: '',
+}
 const mapStateToProps = ({ authentication }) => ({
    username: authentication.user.username,
    token: authentication.user.token

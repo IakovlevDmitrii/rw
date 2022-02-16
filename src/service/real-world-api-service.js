@@ -17,18 +17,26 @@ const authentication = {
   edit: (token, detailsToChange) => editProfile(token, detailsToChange),
 };
 
-const articles = {
-  getPreviews: (page) => getArticlesPreviews(page),
-  getArticle: (slug) => getArticle(slug),
-  favorite: (token, slug) => favoriteArticle(token, slug),
-  unfavorite: (token, slug) => unfavoriteArticle(token, slug),
-  create: (token, content) => createArticle(token, content),
-  edit: (token, slug, detailsToChange) => editArticle(token, slug, detailsToChange),
-  delete: (token, slug) => deleteArticle(token, slug),
-};
+// const articles = {
+//   getPreviews: (page) => getArticlesPreviews(page),
+//   getArticle: (slug) => getArticle(slug),
+//   favorite: (token, slug) => favoriteArticle(token, slug),
+//   unfavorite: (token, slug) => unfavoriteArticle(token, slug),
+//   create: (token, content) => createArticle(token, content),
+//   edit: (token, slug, detailsToChange) => editArticle(token, slug, detailsToChange),
+//   delete: (token, slug) => deleteArticle(token, slug),
+// };
 
 class RealWorldApiService {
-  articles = articles;
+  articles = {
+    getPreviews: (page) => getArticlesPreviews(page),
+    getArticle: (slug) => getArticle(slug),
+    favorite: (token, slug) => favoriteArticle(token, slug),
+    unfavorite: (token, slug) => unfavoriteArticle(token, slug),
+    create: (token, content) => createArticle(token, content),
+    edit: (token, slug, detailsToChange) => editArticle(token, slug, detailsToChange),
+    delete: (token, slug) => deleteArticle(token, slug),
+  };
 
   authentication = authentication;
 }
