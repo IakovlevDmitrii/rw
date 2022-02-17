@@ -5,6 +5,10 @@ const BASE_URL = 'http://kata.academy:8022/api';
 // const BASE_URL = 'https://cirosantilli-realworld-express.herokuapp.com/api';
 
 //    "email":"a@a.a",
+//    "username":"iakovlev",
+//    password: "aaaaaa"
+
+//    "email":"a@a.a",
 //    "username":"aaaf",
 //    password: "aaaaaa"
 //    "image":"https://api.realworld.io/images/smiley-cyrus.jpeg",

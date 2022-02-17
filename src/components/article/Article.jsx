@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useRouteMatch } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 import Body from './body';
-import PersonDetails from "../person-details";
+import Author from "./author";
 
 import favoriteTrueImage from "./images/favorite-true.png";
 import favoriteFalseImage from "./images/favorite-false.png";
-import attention from './images/attention.svg';
 import styles from "./Article.module.scss";
 
 const Article = ({ content, editable, onFavoriteArticle, onDeleteArticle }) => {
@@ -24,48 +23,6 @@ const Article = ({ content, editable, onFavoriteArticle, onDeleteArticle }) => {
          {tag}
       </div>
    ));
-
-   const popUp = (
-      <div className={styles.popUp}>
-
-         <div className={styles.popUpText}>
-            <img src={attention} alt='attention' />
-            <span>Are you sure to delete this article?</span>
-         </div>
-
-         <div className={styles.popUpButtons}>
-            <button
-               className={styles.popUpNo}
-               onClick={() => setIsPopUpOpen(false)}
-               type='button'>
-               No
-            </button>
-            <button
-               className={styles.popUpYes}
-               onClick={() => onDeleteArticle()}
-               type='button'>
-               Yes
-            </button>
-         </div>
-      </div>
-   );
-
-   const buttons = (
-      <div className={styles.buttons}>
-         <button
-            className={styles.deleteArticleButton}
-            onClick={() => setIsPopUpOpen(true)}
-            type='button'>Delete</button>
-
-         {isPopUpOpen && popUp}
-
-         <Link to={`${url}/edit`}>
-            <button
-               className={styles.editArticleButton}
-               type='button'>Edit</button>
-         </Link>
-      </div>
-   );
 
    return (
       <article className={styles.content}>
@@ -99,16 +56,16 @@ const Article = ({ content, editable, onFavoriteArticle, onDeleteArticle }) => {
 
          <Body content={body} />
 
-         <div className={styles.author}>
-            <PersonDetails
-               name={author.username}
-               date={createdAt}
-               src={author.image}
-               alt="user's avatar"
-            />
-
-            {editable && buttons}
-         </div>
+         <Author
+            name={author.username}
+            date={createdAt}
+            avatarSrc={author.image}
+            editable={editable}
+            onDeleteClick={() => setIsPopUpOpen(true)}
+            articleUrl={url}
+            isPopUpOpen={isPopUpOpen}
+            onNoClick={() => setIsPopUpOpen(false)}
+            onYesClick={() => onDeleteArticle()} />
       </article>
    )
 };
