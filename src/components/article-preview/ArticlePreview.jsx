@@ -8,16 +8,21 @@ import favoriteTrueImage from "../article/preview/images/favorite-true.png";
 import favoriteFalseImage from "../article/preview/images/favorite-false.png";
 import styles from './ArticlePreview.module.scss';
 
-const ArticlePreview = ({ content }) => {
+const ArticlePreview = ({ content, onFavoriteArticle }) => {
    const {
       author, createdAt, description, favorited, favoritesCount, slug, tagList, title
    } = content;
 
-   const tags = tagList.map((tag) => (
-      <div className={styles.tag} key={tag}>
-         {tag}
-      </div>
-   ));
+   let key = 0;
+   const tags = tagList.map((tag) => {
+      key = key + 1;
+
+      return(
+         <div className={styles.tag} key={key}>
+            {tag}
+         </div>
+      )
+   });
 
    return (
       <article className={styles.content}>
@@ -28,12 +33,18 @@ const ArticlePreview = ({ content }) => {
                   <Link to={`/articles/${slug}`}>
                      <h2>{title}</h2>
                   </Link>
+
                   <div className={styles.favorites}>
-                     <img
-                        src={favorited ? favoriteTrueImage : favoriteFalseImage}
-                        alt='like' />
+                     <button
+                        className={styles.favoriteButton}
+                        onClick={() => onFavoriteArticle(slug)}
+                        type='button'>
+                        <img
+                           src={favorited ? favoriteTrueImage : favoriteFalseImage}
+                           alt='like' />
+                     </button>
                      <span className={styles.favoritesCount}>
-                        {favoritesCount}
+                         {favoritesCount}
                      </span>
                   </div>
                </div>
@@ -70,7 +81,8 @@ ArticlePreview.propTypes = {
       slug: PropTypes.string.isRequired,
       tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
       title: PropTypes.string.isRequired,
-   }).isRequired
+   }).isRequired,
+   onFavoriteArticle: PropTypes.func.isRequired
 };
 
 export default ArticlePreview;

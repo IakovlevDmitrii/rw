@@ -39,6 +39,37 @@ class RealWorldApiService {
   };
 
   authentication = authentication;
+
+  BASE_URL = 'http://kata.academy:8022/api';
+
+  async getResource(extraUrl, requestOptions) {
+    try {
+      const response = await fetch(`${this.BASE_URL}/${extraUrl}`, requestOptions);
+
+      return response.json();
+    } catch {
+      throw new Error();
+    }
+  }
+
+  // запрос на то, чтобы поставить лайк статье
+  async favoriteArticle(token, slug) {
+    const extraUrl = `articles/${slug}/favorite`;
+
+    // Заголовки запроса
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${token}`,
+      },
+    };
+
+    const res = await this.getResource(extraUrl, requestOptions);
+
+    // если ответ res содержит объект article, значит запрос на лайк прошел успешно
+    return !!res.article;
+  }
 }
 
 const realWorldApiService = new RealWorldApiService();

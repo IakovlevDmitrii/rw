@@ -1,8 +1,11 @@
-# Учебный проект
-В рамках программы изучения React
+<div>
+    <h1>Учебный проект</h1>
+    <span>В рамках программы изучения React</span>
+</div>
 
 ### Цели:
 - Изучение React
+- Изучение React Hooks
 - Изучение Redux
 - Изучение Redux Thunk
 - Использовать [React Router](https://reactrouter.com/)
@@ -26,7 +29,10 @@
 - Использовать [Sass]()
 > _Sass_ — CSS with superpowers. Sass is the most mature, stable, and powerful professional grade CSS extension language in the world.
 
+- Познакомиться с аутентификацией и валидацией форм
 ### Задание:
+Реализовать блог-платформу.  
+[Документация по API](https://api.realworld.io/api-docs/)
 
 ### Инструменты:
 > - JS

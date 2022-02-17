@@ -13,12 +13,12 @@ import { SignIn, SignUp, EditProfile } from '../authComponents';
 // css styles
 import styles from './styles/app.module.scss';
 
-const App = ({ isLoggedIn }) => (
+const App = ({ isLoggedIn, token }) => (
     <div className={styles.content}>
         <Header />
         <Switch>
             <Route path='/articles'>
-                <ArticleList />
+                <ArticleList token={token} />
             </Route>
 
             <PrivateRoute path='/new-article' auth={isLoggedIn}>
@@ -43,11 +43,17 @@ const App = ({ isLoggedIn }) => (
 );
 
 App.propTypes = {
-    isLoggedIn: PropTypes.bool.isRequired
+    isLoggedIn: PropTypes.bool.isRequired,
+    token: PropTypes.string
+};
+
+App.defaultProps = {
+    token: ''
 };
 
 const mapStateToProps = ({ authentication }) => ({
-    isLoggedIn: authentication.isLoggedIn
+    isLoggedIn: authentication.isLoggedIn,
+    token: authentication.user.token
 });
 
 export default connect(mapStateToProps)(App);

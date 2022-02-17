@@ -33,8 +33,8 @@ const Preview = ({ title, onFavoriteArticle, favorited, favoritesCount, tagList,
                                 alt='like' />
                         </button>
                         <span className={styles.favoritesCount}>
-                        {favoritesCount}
-                     </span>
+                            {favoritesCount}
+                        </span>
                     </div>
                 </div>
                 <div className={styles.tags}>
