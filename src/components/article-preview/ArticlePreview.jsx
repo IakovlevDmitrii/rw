@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 
 import PersonDetails from "../person-details";
 
-import favoriteTrueImage from "../article/images/favorite-true.png";
-import favoriteFalseImage from "../article/images/favorite-false.png";
+import favoriteTrueImage from "../article/preview/images/favorite-true.png";
+import favoriteFalseImage from "../article/preview/images/favorite-false.png";
 import styles from './ArticlePreview.module.scss';
 
 const ArticlePreview = ({ content }) => {
@@ -21,6 +21,7 @@ const ArticlePreview = ({ content }) => {
 
    return (
       <article className={styles.content}>
+
          <div className={styles.article}>
             <div className={styles.info}>
                <div className={styles.title}>
@@ -44,6 +45,7 @@ const ArticlePreview = ({ content }) => {
                <p>{description}</p>
             </div>
          </div>
+
          <div className={styles.author}>
             <PersonDetails
                name={author.username}

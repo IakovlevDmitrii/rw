@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { useRouteMatch } from "react-router-dom";
 import PropTypes from 'prop-types';
 
-import Body from './body';
+import Preview from "./preview";
 import Author from "./author";
+import Body from './body';
 
-import favoriteTrueImage from "./images/favorite-true.png";
-import favoriteFalseImage from "./images/favorite-false.png";
 import styles from "./Article.module.scss";
 
 const Article = ({ content, editable, onFavoriteArticle, onDeleteArticle }) => {
@@ -18,41 +17,16 @@ const Article = ({ content, editable, onFavoriteArticle, onDeleteArticle }) => {
 
    const [ isPopUpOpen, setIsPopUpOpen ] = useState(false);
 
-   const tags = tagList.map((tag) => (
-      <div className={styles.tag} key={tag}>
-         {tag}
-      </div>
-   ));
-
    return (
       <article className={styles.content}>
 
-         <div className={styles.article}>
-            <div className={styles.info}>
-               <div className={styles.title}>
-                  <h2>{title}</h2>
-                  <div className={styles.favorites}>
-                     <button
-                        className={styles.favoriteButton}
-                        onClick={() => {onFavoriteArticle()}}
-                        type='button'>
-                        <img
-                           src={favorited ? favoriteTrueImage : favoriteFalseImage}
-                           alt='like' />
-                     </button>
-                     <span className={styles.favoritesCount}>
-                        {favoritesCount}
-                     </span>
-                  </div>
-               </div>
-               <div className={styles.tags}>
-                  {tags}
-               </div>
-            </div>
-            <div className={styles.description}>
-               <p>{description}</p>
-            </div>
-         </div>
+         <Preview
+             title={title}
+             onFavoriteArticle={onFavoriteArticle}
+             favorited={favorited}
+             favoritesCount={favoritesCount}
+             tagList={tagList}
+             description={description} />
 
          <Body content={body} />
 

@@ -22,7 +22,7 @@ const getArticle = async (segment) => {
       favorited,
       favoritesCount,
       tagList,
-      title,
+      title: cropText(title, 100),
     };
   } catch {
     throw new Error();
