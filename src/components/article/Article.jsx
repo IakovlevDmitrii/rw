@@ -13,11 +13,11 @@ const Article = ({ content, editable, onFavoriteArticle, onDeleteArticle }) => {
       author, body, createdAt, description, favorited, favoritesCount, tagList, title
    } = content;
 
-   const { url } = useRouteMatch();
+    const { url } = useRouteMatch();
 
    const [ isPopUpOpen, setIsPopUpOpen ] = useState(false);
 
-   return (
+    return (
       <article className={styles.content}>
 
          <Preview
@@ -45,22 +45,22 @@ const Article = ({ content, editable, onFavoriteArticle, onDeleteArticle }) => {
 };
 
 Article.propTypes = {
-   content: PropTypes.shape({
-      author: PropTypes.shape({
-         image: PropTypes.string.isRequired,
-         username: PropTypes.string.isRequired,
-      }).isRequired,
-      body: PropTypes.string.isRequired,
-      createdAt: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      favorited: PropTypes.bool.isRequired,
-      favoritesCount: PropTypes.number.isRequired,
-      tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
-      title: PropTypes.string.isRequired,
-   }).isRequired,
-   editable: PropTypes.bool.isRequired,
-   onFavoriteArticle: PropTypes.func.isRequired,
-   onDeleteArticle: PropTypes.func.isRequired
+    content: PropTypes.shape({
+    author: PropTypes.shape({
+     image: PropTypes.string.isRequired,
+     username: PropTypes.string.isRequired,
+    }).isRequired,
+    body: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    favorited: PropTypes.bool.isRequired,
+    favoritesCount: PropTypes.number.isRequired,
+    tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
+    title: PropTypes.string.isRequired,
+    }).isRequired,
+    editable: PropTypes.bool.isRequired,
+    onDeleteArticle: PropTypes.func.isRequired,
+    onFavoriteArticle: PropTypes.func.isRequired,
 };
 
 export default Article;

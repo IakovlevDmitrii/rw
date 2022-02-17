@@ -136,29 +136,28 @@ const ArticlePage = ({ username, token }) => {
    }
 
    return (
-      <Switch>
-         <Route path={`${path}/edit`}>
-            <EditArticlePage
-               slug={slug}
-               contentToChange={contentToChange}
-            />
-         </Route>
+       <Switch>
+           <Route path={`${path}/edit`}>
+               <EditArticlePage
+                   slug={slug}
+                   contentToChange={contentToChange}
+               />
+           </Route>
 
-         <Route path={path}>
-            {isArticleDeleted ? <Redirect to="/articles" /> :
-            <section className={styles.section}>
-               <div className={styles.container}>
-                  <Article
-                     content={article}
-                     editable={username === article.author.username}
-                     onFavoriteArticle={onFavoriteArticle}
-                     onDeleteArticle={onDeleteArticle}
-                  />
-               </div>
-            </section>
-           }
-         </Route>
-      </Switch>
+           <Route path={path}>
+               {isArticleDeleted ? <Redirect to="/articles" /> :
+                   <section className={styles.section}>
+                       <div className={styles.container}>
+                           <Article
+                               content={article}
+                               editable={username === article.author.username}
+                               onFavoriteArticle={onFavoriteArticle}
+                               onDeleteArticle={onDeleteArticle} />
+                       </div>
+                   </section>
+               }
+           </Route>
+       </Switch>
    )
 };
 
