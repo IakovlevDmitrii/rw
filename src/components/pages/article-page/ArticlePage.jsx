@@ -5,12 +5,14 @@ import {
   Route,
   Redirect,
   useRouteMatch,
-  useParams,
+  useParams
 } from "react-router-dom";
 import PropTypes from "prop-types";
 
+// api service
 import realWorldApiService from "../../../service";
 
+// components
 import Article from "../../article";
 import EditArticlePage from "../edit-article-page";
 import Spinner from "../../spinner";
@@ -18,7 +20,7 @@ import ErrorIndicator from "../../errors/error-indicator";
 
 import styles from "./ArticlePage.module.scss";
 
-function ArticlePage({ username, token }) {
+function ArticlePage({ username, token, isLoggedIn }) {
   const { slug } = useParams();
   const { path } = useRouteMatch();
 
@@ -27,10 +29,13 @@ function ArticlePage({ username, token }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isArticleDeleted, setIsArticleDeleted] = useState(false);
 
+  // каждый раз, прежде чем отобразить статью будем ее получать с сервера
   const loadArticle = useCallback(() => {
     realWorldApiService.articles
       .getOne(slug)
       .then((articleContent) => {
+
+        // полученную статью сохраним в article
         setArticle(articleContent);
       })
       .catch(() => {
@@ -44,50 +49,30 @@ function ArticlePage({ username, token }) {
   useEffect(() => loadArticle(), [loadArticle]);
 
   const onFavoriteArticle = () => {
+
+    // узнаем, отмечена ли статья лайком
     const { favorited } = article;
-    setIsLoading(true);
+    // setIsLoading(true);
 
-    if (favorited) {
-      realWorldApiService.articles
-        .unfavorite(token, slug)
-        .then((res) => {
-          const articleDetails = res.article;
-          const serverErrors = res.errors;
+    // имя запроса зависит от значения favorited
+    const getRequestName = () => (favorited ? "unfavorite" : "favorite");
 
-          if (articleDetails) {
-            setArticle(articleDetails);
-          }
-          if (serverErrors) {
-            setHasError(true);
-          }
-        })
-        .catch(() => {
+    // отправим запрос на изменение лайка
+    realWorldApiService.articles[getRequestName()](token, slug)
+      .then((res) => {
+        // если запрос прошел успешно
+        if (res) {
+
+          // заменим лайк в статье
+          setArticle({...article, favorited: !favorited})
+        } else {
+          // если запрос не прошел
           setHasError(true);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      realWorldApiService.articles
-        .favorite(token, slug)
-        .then((res) => {
-          const articleDetails = res.article;
-          const serverErrors = res.errors;
-
-          if (articleDetails) {
-            setArticle(articleDetails);
-          }
-          if (serverErrors) {
-            setHasError(true);
-          }
-        })
-        .catch(() => {
-          setHasError(true);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
+        }
+      })
+      .catch(() => {
+        setHasError(true);
+      });
   };
 
   const onDeleteArticle = () => {
@@ -144,6 +129,7 @@ function ArticlePage({ username, token }) {
               <Article
                 content={article}
                 token={token}
+                isLoggedIn={isLoggedIn}
                 editable={username === article.author.username}
                 onFavoriteArticle={onFavoriteArticle}
                 onDeleteArticle={onDeleteArticle}
@@ -158,15 +144,19 @@ function ArticlePage({ username, token }) {
 
 ArticlePage.propTypes = {
   username: PropTypes.string,
-  token: PropTypes.string.isRequired,
+  token: PropTypes.string,
+  isLoggedIn: PropTypes.bool.isRequired
 };
 
 ArticlePage.defaultProps = {
   username: "",
+  token: ""
 };
+
 const mapStateToProps = ({ authentication }) => ({
   username: authentication.user.username,
   token: authentication.user.token,
+  isLoggedIn: authentication.isLoggedIn
 });
 
 export default connect(mapStateToProps)(ArticlePage);
