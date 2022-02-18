@@ -2,7 +2,6 @@ import { format } from "date-fns";
 import { cropText } from "../utils";
 
 import {
-  getArticle,
   createArticle,
   editArticle,
   deleteArticle,
@@ -14,7 +13,7 @@ import {
 class RealWorldApiService {
   articles = {
     getList: (page) => this.getList(page),
-    getArticle: (slug) => getArticle(slug),
+    getOne: (slug) => this.getOne(slug),
     favorite: (token, slug) => this.favoriteArticle(token, slug),
     unfavorite: (token, slug) => this.unfavoriteArticle(token, slug),
     create: (token, content) => createArticle(token, content),
@@ -85,6 +84,41 @@ class RealWorldApiService {
     return {
       articles: newArticles,
       articlesCount,
+    };
+  }
+
+  // запрос на получение статьи
+  async getOne(segment) {
+    const extraUrl = `articles/${segment}`;
+
+    const response = await this.getResource(extraUrl);
+    const { article } = response;
+    const {
+      author,
+      body = "",
+      createdAt,
+      description,
+      favorited,
+      favoritesCount,
+      slug,
+      tagList,
+      title,
+    } = article;
+
+    // вернем только то, чем будем пользоваться
+    return {
+      author: {
+        image: author.image,
+        username: author.username,
+      },
+      body,
+      createdAt: format(new Date(createdAt), "MMMM d, yyyy"),
+      description: cropText(description, 170),
+      favorited,
+      favoritesCount,
+      slug,
+      tagList,
+      title: cropText(title, 100),
     };
   }
 

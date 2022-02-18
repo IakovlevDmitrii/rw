@@ -1,4 +1,3 @@
-import getArticle from "./get-article";
 import favoriteArticle from "./favorite-article";
 import createArticle from "./create-article";
 import editArticle from "./edit-article";
@@ -8,7 +7,6 @@ import loginUser from "./login-user";
 import editProfile from "./edit-profile";
 
 export {
-  getArticle,
   favoriteArticle,
   createArticle,
   editArticle,
