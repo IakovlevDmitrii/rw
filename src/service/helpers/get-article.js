@@ -9,7 +9,7 @@ const getArticle = async (segment) => {
   try {
     const response = await getResource(url);
     const { article } = response;
-    const { author, body = '', createdAt, description, favorited, favoritesCount, tagList, title } = article;
+    const { author, body = '', createdAt, description, favorited, favoritesCount, slug, tagList, title } = article;
 
     return {
       author: {
@@ -21,6 +21,7 @@ const getArticle = async (segment) => {
       description: cropText(description, 170),
       favorited,
       favoritesCount,
+      slug,
       tagList,
       title: cropText(title, 100),
     };

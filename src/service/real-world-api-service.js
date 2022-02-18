@@ -1,7 +1,9 @@
+import { format } from 'date-fns';
+import { cropText } from '../utils';
+
 import {
   getArticle,
-  getArticlesPreviews,
-  favoriteArticle,
+  // favoriteArticle,
   unfavoriteArticle,
   createArticle,
   editArticle,
@@ -17,21 +19,11 @@ const authentication = {
   edit: (token, detailsToChange) => editProfile(token, detailsToChange),
 };
 
-// const articles = {
-//   getPreviews: (page) => getArticlesPreviews(page),
-//   getArticle: (slug) => getArticle(slug),
-//   favorite: (token, slug) => favoriteArticle(token, slug),
-//   unfavorite: (token, slug) => unfavoriteArticle(token, slug),
-//   create: (token, content) => createArticle(token, content),
-//   edit: (token, slug, detailsToChange) => editArticle(token, slug, detailsToChange),
-//   delete: (token, slug) => deleteArticle(token, slug),
-// };
-
 class RealWorldApiService {
   articles = {
-    getPreviews: (page) => getArticlesPreviews(page),
+    getList: (page) =>this.getList(page),
     getArticle: (slug) => getArticle(slug),
-    favorite: (token, slug) => favoriteArticle(token, slug),
+    favorite: (token, slug) => this.favoriteArticle(token, slug),
     unfavorite: (token, slug) => unfavoriteArticle(token, slug),
     create: (token, content) => createArticle(token, content),
     edit: (token, slug, detailsToChange) => editArticle(token, slug, detailsToChange),
@@ -52,6 +44,49 @@ class RealWorldApiService {
     }
   }
 
+  // запрос на получение списка статей
+  async getList(page){
+    const extraUrl = `articles?limit=5&offset=${(page - 1) * 5}`;
+
+    const response = await this.getResource(extraUrl);
+    const { articles, articlesCount } = response;
+
+    // в newArticles сохраним только то, чем будем пользоваться
+    const newArticles = articles.map( article => {
+      const {
+        author,
+        body,
+        createdAt,
+        description,
+        favorited,
+        favoritesCount,
+        slug,
+        tagList,
+        title
+      } = article;
+
+      return {
+        author: {
+          image: author.image,
+          username: author.username,
+        },
+        body,
+        createdAt: format(new Date(createdAt), 'MMMM d, yyyy'),
+        description: cropText(description, 170),
+        favorited,
+        favoritesCount,
+        slug,
+        tagList,
+        title
+      };
+    });
+
+    return {
+      articles: newArticles,
+      articlesCount,
+    };
+  }
+
   // запрос на то, чтобы поставить лайк статье
   async favoriteArticle(token, slug) {
     const extraUrl = `articles/${slug}/favorite`;
@@ -65,10 +100,10 @@ class RealWorldApiService {
       },
     };
 
-    const res = await this.getResource(extraUrl, requestOptions);
+    const response = await this.getResource(extraUrl, requestOptions);
 
-    // если ответ res содержит объект article, значит запрос на лайк прошел успешно
-    return !!res.article;
+    // если ответ res содержит объект article, значит запрос прошел успешно
+    return !!response.article;
   }
 }
 

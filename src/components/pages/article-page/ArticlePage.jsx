@@ -150,6 +150,7 @@ const ArticlePage = ({ username, token }) => {
                        <div className={styles.container}>
                            <Article
                                content={article}
+                               token={token}
                                editable={username === article.author.username}
                                onFavoriteArticle={onFavoriteArticle}
                                onDeleteArticle={onDeleteArticle} />

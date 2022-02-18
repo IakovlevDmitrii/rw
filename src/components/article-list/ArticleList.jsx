@@ -23,12 +23,13 @@ const ArticleList = ({ token } ) => {
     const [ isLoading, setIsLoading ] = useState(true);
     const [ articleList, setArticleList ] = useState([]);
 
+    // каждый раз при изменении номера страницы будем загружать список статей
     const loadArticleList = useCallback( () => {
             setIsLoading(true);
 
             realWorldApiService
                 .articles
-                .getPreviews(page)
+                .getList(page)
                 .then( ({ articles, articlesCount }) => {
                     setArticleList(articles);
                     setCount(articlesCount);
@@ -59,7 +60,9 @@ const ArticleList = ({ token } ) => {
         if(!favorited) {
             // отправим запрос поставить лайк
             realWorldApiService
-               .favoriteArticle(token, slug)
+               .articles
+               // .favoriteArticle(token, slug)
+               .favorite(token, slug)
                .then((res) => {
                    // если запрос прошел успешно
                    if(res) {
