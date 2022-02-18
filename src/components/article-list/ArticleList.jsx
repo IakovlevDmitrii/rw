@@ -42,44 +42,49 @@ function ArticleList({ token }) {
   }, [page]);
 
   useEffect(() => loadArticleList(), [loadArticleList]);
+  useEffect( () => () => {
+    setArticleList([]);
+  }, [] );
 
+  // при нажатии на лайк
   const onFavoriteArticle = (slug) => {
+
     // в списке статей найдем ту, которой нужно поставить или убрать лайк
-    const result = articleList.find((article) => slug === article.slug);
+    const index = articleList.findIndex(
+      (article) => article.slug === slug
+    );
+    const searchedArticle = articleList[index];
 
     // узнаем, отмечена ли статья лайком
-    const { favorited } = result;
+    const { favorited } = searchedArticle;
 
     // имя запроса зависит от значения favorited
     const getRequestName = () => (favorited ? "unfavorite" : "favorite");
 
-    // функция для замены значения favorited в выбранной статье из списка ArticleList
+    // функция для замены значения favorited в выбранной статье
     const toggleFavorited = () => {
-      // найдем статью по значению slug
-      const articleIndex = articleList.findIndex(
-        (article) => article.slug === slug
-      );
-      const oldArticle = articleList[articleIndex];
 
-      // заменим в ней значение favorite на противоположное
-      const newArticle = { ...oldArticle, favorited: !favorited };
+      // создадим копию выбранной статьи и заменим в ней значение favorite на противоположное
+      const newArticle = { ...searchedArticle, favorited: !favorited };
 
       // новый список статей содержит измененную статью
       const newArticleList = [
-        ...articleList.slice(0, articleIndex),
+        ...articleList.slice(0, index),
         newArticle,
-        ...articleList.slice(articleIndex + 1),
+        ...articleList.slice(index + 1),
       ];
 
       // сохраним измененный список статей в state
       setArticleList(newArticleList);
     };
 
-    // функция отправляет запрос на изменение лайка
+    // отправим запрос на изменение лайка
     realWorldApiService.articles[getRequestName()](token, slug)
       .then((res) => {
         // если запрос прошел успешно
         if (res) {
+
+          // заменим лайк в статье
           toggleFavorited();
         } else {
           // если запрос не прошел
