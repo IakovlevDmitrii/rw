@@ -32,12 +32,9 @@ function Article({ content, token, isLoggedIn, editable, onFavoriteArticle }) {
     realWorldApiService.articles
       .delete(token, slug)
       .then((res) => {
-        const serverErrors = res.errors;
-
-        if (res === "ok") {
+        if (res) {
           setIsArticleDeleted(true);
-        }
-        if (serverErrors) {
+        } else {
           throw new Error();
         }
       })
