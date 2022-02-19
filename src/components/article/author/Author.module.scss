@@ -26,12 +26,8 @@
 
 .buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: relative;
-
-  @media only screen and ($screen-xl) {
-    flex-direction: row;
-  }
 }
 
 %button{
@@ -48,14 +44,9 @@
 
 .deleteArticleButton {
   @extend %button;
-  margin-bottom: 5px;
   border: 1px solid $color__4;
   color: $color__4;
-
-  @media only screen and ($screen-xl) {
-    margin-right: 8px;
-    margin-bottom: 0;
-  }
+  margin-right: 8px;
 }
 
 .editArticleButton {
