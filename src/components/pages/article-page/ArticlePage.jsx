@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import {
   Switch,
   Route,
-  Redirect,
   useRouteMatch,
   useParams
 } from "react-router-dom";
@@ -27,7 +26,6 @@ function ArticlePage({ username, token, isLoggedIn }) {
   const [article, setArticle] = useState({});
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isArticleDeleted, setIsArticleDeleted] = useState(false);
 
   // каждый раз, прежде чем отобразить статью будем ее получать с сервера
   const loadArticle = useCallback(() => {
@@ -75,24 +73,6 @@ function ArticlePage({ username, token, isLoggedIn }) {
       });
   };
 
-  const onDeleteArticle = () => {
-    realWorldApiService.articles
-      .delete(token, slug)
-      .then((res) => {
-        const serverErrors = res.errors;
-
-        if (res === "ok") {
-          setIsArticleDeleted(true);
-        }
-        if (serverErrors) {
-          throw new Error();
-        }
-      })
-      .catch((err) => {
-        throw new Error(err.message);
-      });
-  };
-
   const { title, description, body } = article;
   const contentToChange = { title, description, body };
 
@@ -121,22 +101,17 @@ function ArticlePage({ username, token, isLoggedIn }) {
       </Route>
 
       <Route path={path}>
-        {isArticleDeleted ? (
-          <Redirect to="/articles" />
-        ) : (
-          <section className={styles.section}>
-            <div className={styles.container}>
-              <Article
-                content={article}
-                token={token}
-                isLoggedIn={isLoggedIn}
-                editable={username === article.author.username}
-                onFavoriteArticle={onFavoriteArticle}
-                onDeleteArticle={onDeleteArticle}
-              />
-            </div>
-          </section>
-        )}
+        <section className={styles.section}>
+          <div className={styles.container}>
+            <Article
+              content={article}
+              token={token}
+              isLoggedIn={isLoggedIn}
+              editable={username === article.author.username}
+              onFavoriteArticle={onFavoriteArticle}
+            />
+          </div>
+        </section>
       </Route>
     </Switch>
   );

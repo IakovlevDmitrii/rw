@@ -4,7 +4,6 @@ import { createRequestOptions, cropText } from "../utils";
 import {
   createArticle,
   editArticle,
-  deleteArticle,
   registerUser,
   loginUser,
   editProfile,
@@ -19,7 +18,7 @@ class RealWorldApiService {
     create: (token, content) => createArticle(token, content),
     edit: (token, slug, detailsToChange) =>
       editArticle(token, slug, detailsToChange),
-    delete: (token, slug) => deleteArticle(token, slug),
+    delete: (token, slug) => this.deleteArticle(token, slug),
   };
 
   authentication = {
@@ -141,10 +140,21 @@ class RealWorldApiService {
   }
 
   // запрос на удаление статьи
-  // async deleteArticle(token, slug) {
-  //   const url = `articles/${slug}`;
-  //
-  // }
+  async deleteArticle(token, slug) {
+    const url = `${this.BASE_URL}/articles/${slug}`;
+
+    try {
+      const response = await fetch(
+        url,
+        createRequestOptions('DELETE', token)
+      );
+
+      return !!response.ok
+    } catch {
+      throw new Error();
+    }
+  }
+
 }
 
 const realWorldApiService = new RealWorldApiService();
