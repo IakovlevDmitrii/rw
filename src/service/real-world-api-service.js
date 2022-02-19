@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { cropText } from "../utils";
+import { createRequestOptions, cropText } from "../utils";
 
 import {
   createArticle,
@@ -12,8 +12,8 @@ import {
 
 class RealWorldApiService {
   articles = {
-    getList: (page) => this.getList(page),
-    getOne: (slug) => this.getOne(slug),
+    getList: (page) => this.getArticleList(page),
+    getOne: (slug) => this.getArticle(slug),
     favorite: (token, slug) => this.favoriteArticle(token, slug),
     unfavorite: (token, slug) => this.unfavoriteArticle(token, slug),
     create: (token, content) => createArticle(token, content),
@@ -31,11 +31,11 @@ class RealWorldApiService {
 
   BASE_URL = "http://kata.academy:8022/api";
 
-  async getResource(extraUrl, requestOptions) {
+  async getResource(extraUrl, method, token) {
     try {
       const response = await fetch(
         `${this.BASE_URL}/${extraUrl}`,
-        requestOptions
+        createRequestOptions(method, token)
       );
 
       return response.json();
@@ -45,7 +45,7 @@ class RealWorldApiService {
   }
 
   // запрос на получение списка статей
-  async getList(page) {
+  async getArticleList(page) {
     const extraUrl = `articles?limit=5&offset=${(page - 1) * 5}`;
 
     const response = await this.getResource(extraUrl);
@@ -88,7 +88,7 @@ class RealWorldApiService {
   }
 
   // запрос на получение статьи
-  async getOne(segment) {
+  async getArticle(segment) {
     const extraUrl = `articles/${segment}`;
 
     const response = await this.getResource(extraUrl);
@@ -125,17 +125,7 @@ class RealWorldApiService {
   // запрос на то, чтобы поставить лайк статье
   async favoriteArticle(token, slug) {
     const url = `articles/${slug}/favorite`;
-
-    // Заголовки запроса
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-        Authorization: `Token ${token}`,
-      },
-    };
-
-    const response = await this.getResource(url, requestOptions);
+    const response = await this.getResource(url, 'POST', token);
 
     // если ответ res содержит объект article, значит запрос прошел успешно
     return !!response.article;
@@ -144,21 +134,17 @@ class RealWorldApiService {
   // запрос на то, чтобы удалить лайк у статьи
   async unfavoriteArticle(token, slug) {
     const url = `articles/${slug}/favorite`;
-
-    // Заголовки запроса
-    const requestOptions = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-        Authorization: `Token ${token}`,
-      },
-    };
-
-    const response = await this.getResource(url, requestOptions);
+    const response = await this.getResource(url, 'DELETE', token);
 
     // если ответ res содержит объект article, значит запрос прошел успешно
     return !!response.article;
   }
+
+  // запрос на удаление статьи
+  // async deleteArticle(token, slug) {
+  //   const url = `articles/${slug}`;
+  //
+  // }
 }
 
 const realWorldApiService = new RealWorldApiService();
