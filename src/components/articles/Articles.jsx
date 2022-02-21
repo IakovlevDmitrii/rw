@@ -1,18 +1,23 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Switch, Route, useRouteMatch} from "react-router-dom";
 import { Pagination } from "antd";
 import PropTypes from "prop-types";
 
-import ArticlePreview from "../article-preview";
+// components
+import Article from "../article";
 import Spinner from "../spinner";
 import ErrorIndicator from "../errors/error-indicator";
+
+import ArticlePage from "../pages/article-page";
 
 import realWorldApiService from "../../service";
 
 import "antd/dist/antd.css";
 import "./pagination.css";
-import styles from "./ArticleList.module.scss";
+import styles from "./Articles.module.scss";
 
-function ArticleList({ token, isLoggedIn }) {
+function Articles({ token, isLoggedIn}) {
+  const { path } = useRouteMatch();
 
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
@@ -102,43 +107,56 @@ function ArticleList({ token, isLoggedIn }) {
   }
 
   const listToShow = articleList.map((article) => (
-    <ArticlePreview
+    <Article
+      isPreview
       content={article}
+      token={token}
       isLoggedIn={isLoggedIn}
+      editable={false}
       onFavoriteArticle={onFavoriteArticle}
       key={article.slug}
     />
   ));
 
-  return (
-      <section>
-        <div className={styles.container}>
-          <div className={styles.content}>
-            {listToShow}
-            <div className={styles.pagination}>
-              <Pagination
-                current={page}
-                onChange={(pageNumber) => setPage(pageNumber)}
-                total={count}
-                hideOnSinglePage
-                pageSize="5"
-                size="small"
-                showSizeChanger={false}
-              />
+  return(
+    <Switch>
+
+      <Route path={`${path}/:slug`}>
+        <ArticlePage />
+      </Route>
+
+      <Route path={path}>
+        <section>
+          <div className={styles.container}>
+            <div className={styles.content}>
+              {listToShow}
+              <div className={styles.pagination}>
+                <Pagination
+                  current={page}
+                  onChange={(pageNumber) => setPage(pageNumber)}
+                  total={count}
+                  hideOnSinglePage
+                  pageSize="5"
+                  size="small"
+                  showSizeChanger={false}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-  );
+        </section>
+      </Route>
+
+    </Switch>
+  )
 }
 
-ArticleList.propTypes = {
+Articles.propTypes = {
   token: PropTypes.string,
-  isLoggedIn: PropTypes.bool.isRequired
-};
+  isLoggedIn: PropTypes.bool.isRequired,
+}
 
-ArticleList.defaultProps = {
+Articles.defaultProps = {
   token: "",
 };
 
-export default ArticleList;
+export default Articles;

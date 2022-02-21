@@ -5,6 +5,14 @@
   grid-column-end: 2;
   grid-row-start: 1;
   grid-row-end: 2;
+
+  &Preview {
+    border-bottom: 1px solid $brand_primary__4;
+
+    @media only screen and ($screen-sm) {
+      border-bottom: 0
+    }
+  }
 }
 
 .info {
@@ -32,6 +40,7 @@
     @extend %flex_center;
     max-width: 85%;
     height: 1.75rem;
+    overflow: hidden;
   }
 
   h2 {
@@ -58,6 +67,7 @@
 
 .favoritesCount {
   margin-left: 0.5rem;
+  color: rgba(0, 0, 0, 0.75);
 }
 
 .tags {
@@ -74,6 +84,7 @@
   border-radius: 0.1rem;
   padding: 0 0.25rem;
   font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .description {
@@ -87,9 +98,12 @@
 
   p {
     font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.5);
   }
-}
 
-.description {
-  color: rgba(0, 0, 0, 0.5);
+  &Preview {
+    p {
+      color: rgba(0, 0, 0, 0.75);
+    }
+  }
 }

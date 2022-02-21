@@ -1,1 +1,12 @@
-@import '../app/styles/article.module';
+@import '../app/styles/const.module';
+
+.content {
+  @extend %content;
+  display: grid;
+  grid-template-rows: 10rem auto 5rem;
+
+  @media only screen and ($screen-sm) {
+    grid-template-columns: 60% 40%;
+    grid-template-rows: 10rem auto;
+  }
+}

@@ -45,6 +45,7 @@ function ArticlePage({ username, token, isLoggedIn }) {
   }, [slug, setArticle]);
 
   useEffect(() => loadArticle(), [loadArticle]);
+  useEffect(() => () => setArticle({}), []);
 
   const onFavoriteArticle = () => {
 
@@ -104,6 +105,7 @@ function ArticlePage({ username, token, isLoggedIn }) {
         <section className={styles.section}>
           <div className={styles.container}>
             <Article
+              isPreview={false}
               content={article}
               token={token}
               isLoggedIn={isLoggedIn}

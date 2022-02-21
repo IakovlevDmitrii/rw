@@ -10,7 +10,13 @@ import realWorldApiService from "../../service";
 
 import styles from "./Article.module.scss";
 
-function Article({ content, token, isLoggedIn, editable, onFavoriteArticle }) {
+function Article({
+                   isPreview,
+                   content,
+                   token,
+                   isLoggedIn,
+                   editable,
+                   onFavoriteArticle }) {
   const {
     author,
     body,
@@ -50,6 +56,7 @@ function Article({ content, token, isLoggedIn, editable, onFavoriteArticle }) {
       ) : (
         <article className={styles.content}>
           <Preview
+            isPreview={isPreview}
             slug={slug}
             title={title}
             isLoggedIn={isLoggedIn}
@@ -60,13 +67,14 @@ function Article({ content, token, isLoggedIn, editable, onFavoriteArticle }) {
             description={description}
           />
 
-          <Body content={body} />
+          {!isPreview && <Body content={body} />}
 
           <Author
+            isPreview={isPreview}
+            editable={editable}
             name={author.username}
             date={createdAt}
             avatarSrc={author.image}
-            editable={editable}
             onDeleteClick={() => setIsPopUpOpen(true)}
             articleUrl={url}
             isPopUpOpen={isPopUpOpen}
@@ -80,12 +88,13 @@ function Article({ content, token, isLoggedIn, editable, onFavoriteArticle }) {
 }
 
 Article.propTypes = {
+  isPreview: PropTypes.bool.isRequired,
   content: PropTypes.shape({
     author: PropTypes.shape({
       image: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
     }).isRequired,
-    body: PropTypes.string.isRequired,
+    body: PropTypes.string,
     createdAt: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     favorited: PropTypes.bool.isRequired,
@@ -93,7 +102,7 @@ Article.propTypes = {
     slug: PropTypes.string.isRequired,
     tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
     title: PropTypes.string.isRequired,
-  }).isRequired,
+  }),
   token: PropTypes.string,
   isLoggedIn: PropTypes.bool.isRequired,
   editable: PropTypes.bool.isRequired,
@@ -101,7 +110,10 @@ Article.propTypes = {
 };
 
 Article.defaultProps = {
-  token: "",
+  content: {
+    body: ""
+  },
+  token: ""
 };
 
 export default Article;

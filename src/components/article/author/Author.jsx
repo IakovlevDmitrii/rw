@@ -7,15 +7,16 @@ import attention from "./images/attention.svg";
 import styles from "./Author.module.scss";
 
 function Author({
-  name,
-  date,
-  avatarSrc,
-  editable,
-  onDeleteClick,
-  articleUrl,
-  isPopUpOpen,
-  onNoClick,
-  onYesClick,
+                  isPreview,
+                  editable,
+                  name,
+                  date,
+                  avatarSrc,
+                  onDeleteClick,
+                  articleUrl,
+                  isPopUpOpen,
+                  onNoClick,
+                  onYesClick,
 }) {
   const popUp = (
     <div className={styles.popUp}>
@@ -64,16 +65,17 @@ function Author({
         alt="user's avatar"
       />
 
-      {editable && buttons}
+      {!isPreview && editable && buttons}
     </div>
   );
 }
 
 Author.propTypes = {
+  isPreview: PropTypes.bool.isRequired,
+  editable: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   avatarSrc: PropTypes.string.isRequired,
-  editable: PropTypes.bool.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
   articleUrl: PropTypes.string.isRequired,
   isPopUpOpen: PropTypes.bool.isRequired,

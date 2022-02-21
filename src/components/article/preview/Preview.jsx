@@ -1,24 +1,35 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import classNames from 'classnames';
 
 import favoriteTrueImage from "./images/favorite-true.png";
 import favoriteFalseImage from "./images/favorite-false.png";
 import styles from "./Preview.module.scss";
 
 function Preview({
-  slug,
-  title,
-  isLoggedIn,
-  onFavoriteArticle,
-  favorited,
-  favoritesCount,
-  tagList,
-  description,
+                  isPreview,
+                  slug,
+                  title,
+                  isLoggedIn,
+                  onFavoriteArticle,
+                  favorited,
+                  favoritesCount,
+                  tagList,
+                  description,
 }) {
+  const articleTitle = isPreview ? (
+    <Link to={`/articles/${slug}`}>
+      <h2>{title}</h2>
+    </Link>
+  ) : (
+    <h2>{title}</h2>
+  );
+
   const favoriteButton = isLoggedIn ? (
     <button
       className={styles.favoriteButton}
-      onClick={onFavoriteArticle}
+      onClick={() => onFavoriteArticle(slug)}
       type="button"
     >
       <img
@@ -45,11 +56,19 @@ function Preview({
     })
   );
 
+  const getClass = (name) => (
+    classNames({
+      [styles[name]]: true,
+      [styles[`${name}Preview`]]: isPreview,
+    })
+  )
+
   return (
-    <div className={styles.article}>
+    <div className={getClass("article")}>
       <div className={styles.info}>
         <div className={styles.title}>
-          <h2>{title}</h2>
+          {articleTitle}
+
           <div className={styles.favorites}>
             {favoriteButton}
             <span className={styles.favoritesCount}>{favoritesCount}</span>
@@ -57,7 +76,7 @@ function Preview({
         </div>
         <div className={styles.tags}>{getTags()}</div>
       </div>
-      <div className={styles.description}>
+      <div className={getClass("description")}>
         <p>{description}</p>
       </div>
     </div>
@@ -65,6 +84,7 @@ function Preview({
 }
 
 Preview.propTypes = {
+  isPreview: PropTypes.bool.isRequired,
   slug: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,

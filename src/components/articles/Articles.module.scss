@@ -1,5 +1,15 @@
 @import '../app/styles/const.module';
 
+//.ant-pagination-item-active {
+//  background: $brand_primary__2;
+//  border-radius: 4px;
+//}
+//
+//.ant-pagination-item-active a,
+//.ant-pagination-item-active:focus-visible a,
+//.ant-pagination-item-active:hover a {
+//  color: $brand_primary__1;
+//}
 .container {
   @extend %container;
 }
@@ -18,13 +28,3 @@
   flex-direction: column;
   align-items: center;
 }
-//.ant-pagination-item-active {
-//  background: $brand_primary__2;
-//  border-radius: 4px;
-//}
-//
-//.ant-pagination-item-active a,
-//.ant-pagination-item-active:focus-visible a,
-//.ant-pagination-item-active:hover a {
-//  color: $brand_primary__1;
-//}

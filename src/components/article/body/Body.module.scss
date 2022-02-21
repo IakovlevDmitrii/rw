@@ -1,4 +1,4 @@
-@import '../../app/styles/article.module';
+@import '../../app/styles/const.module';
 
 .body {
   grid-column-start: 1;
@@ -11,5 +11,9 @@
   @media only screen and ($screen-sm) {
     grid-column-end: 3;
     border-bottom: 0;
+  }
+
+  p{
+    color: rgba(0, 0, 0, 0.75);
   }
 }
