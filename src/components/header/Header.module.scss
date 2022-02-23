@@ -5,18 +5,18 @@
    position: sticky;
    z-index: 1;
    top: 0;
+}
+
+.container {
+   @extend %container;
    background-color: $brand_primary__1;
    box-shadow: 0 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.15);
 }
-
-.container {@extend %container;}
 
 .content {
    @extend %flex_center;
    padding: 0.75rem 1rem;
    font-size: 1.2rem;
-
-   @media only screen and ($screen-sm) {padding: 0.75rem 0;}
 
    a:nth-child(n+2) {
       display: flex;
@@ -52,4 +52,9 @@
    @extend %auth_button;
 
    &Active {@extend %auth_buttonActive;}
+}
+
+.spinnerContainer {
+   height: 2rem;
+   padding: 0.1rem;
 }
