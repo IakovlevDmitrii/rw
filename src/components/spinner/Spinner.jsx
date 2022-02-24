@@ -1,18 +1,14 @@
-import React from 'react';
-import styles from './spinner.module.scss';
+import React from "react";
+import styles from "./spinner.module.scss";
 
-const { section, container, content, spinner } = styles;
-
-const Spinner = () => (
-   <section className={section}>
-      <div className={container}>
-         <div className={content}>
-            <div className={spinner}>
-               <div />
-            </div>
-         </div>
+function Spinner() {
+  return (
+    <div className={styles.content}>
+      <div className={styles.spinner}>
+        <div />
       </div>
-   </section>
-);
+    </div>
+  );
+}
 
 export default Spinner;
