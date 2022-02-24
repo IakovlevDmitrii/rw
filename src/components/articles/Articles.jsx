@@ -15,13 +15,12 @@ import "antd/dist/antd.css";
 import "./pagination.css";
 import styles from "./Articles.module.scss";
 
-function Articles({ token, isLoggedIn, dispatchLoading, dispatchArticles }) {
+function Articles({ token, articleList, isLoggedIn, dispatchLoading, dispatchArticles }) {
   const { path } = useRouteMatch();
 
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [hasError, setHasError] = useState(false);
-  const [articleList, setArticleList] = useState([]);
 
   // каждый раз при монтировании компонента
   // или изменении номера страницы
@@ -32,7 +31,6 @@ function Articles({ token, isLoggedIn, dispatchLoading, dispatchArticles }) {
     realWorldApiService.articles
       .getList(page)
       .then(({ articles, articlesCount }) => {
-        setArticleList(articles);
         setCount(articlesCount);
         dispatchArticles(articles);
       })
@@ -45,12 +43,6 @@ function Articles({ token, isLoggedIn, dispatchLoading, dispatchArticles }) {
   }, [page, dispatchLoading, dispatchArticles]);
 
   useEffect(() => loadArticleList(), [loadArticleList]);
-  useEffect(
-    () => () => {
-      setArticleList([]);
-    },
-    []
-  );
 
   // при нажатии на лайк
   const onFavoriteArticle = (slug) => {
@@ -65,14 +57,16 @@ function Articles({ token, isLoggedIn, dispatchLoading, dispatchArticles }) {
 
     // функция для замены значения favorited в выбранной статье
     const toggleFavorited = () => {
-      const newFavoritesCount = favorited ? favoritesCount - 1 : favoritesCount + 1;
+      const newFavoritesCount = favorited
+        ? favoritesCount - 1
+        : favoritesCount + 1;
       // создадим копию выбранной статьи и заменим в ней значение
       // favorite на противоположное
       // увеличим или уменьшим количество лайков
       const newArticle = {
         ...searchedArticle,
         favorited: !favorited,
-        favoritesCount: newFavoritesCount
+        favoritesCount: newFavoritesCount,
       };
 
       // новый список статей содержит измененную статью
@@ -83,7 +77,6 @@ function Articles({ token, isLoggedIn, dispatchLoading, dispatchArticles }) {
       ];
 
       // сохраним измененный список статей
-      setArticleList(newArticleList);
       dispatchArticles(newArticleList);
     };
 
@@ -149,6 +142,22 @@ function Articles({ token, isLoggedIn, dispatchLoading, dispatchArticles }) {
 }
 
 Articles.propTypes = {
+  articleList: PropTypes.arrayOf(
+    PropTypes.shape({
+      author: PropTypes.shape({
+        image: PropTypes.string,
+        username: PropTypes.string,
+      }),
+      body: PropTypes.string,
+      createdAt: PropTypes.string,
+      description: PropTypes.string,
+      favorited: PropTypes.bool,
+      favoritesCount: PropTypes.number,
+      slug: PropTypes.string,
+      tagList: PropTypes.arrayOf(PropTypes.string),
+      title: PropTypes.string,
+    })
+  ),
   token: PropTypes.string,
   isLoggedIn: PropTypes.bool.isRequired,
   dispatchLoading: PropTypes.func.isRequired,
@@ -157,11 +166,30 @@ Articles.propTypes = {
 
 Articles.defaultProps = {
   token: "",
+  articleList: [
+    {
+    author: {
+      image: "",
+      username: "",
+    },
+    body: "",
+    createdAt: "",
+    description: "",
+    favorited:false,
+    favoritesCount: 0,
+    slug: "",
+    tagList: [''],
+    title: "",
+  }
+  ]
 };
 
+const mapStateToProps = ({ articlesData }) => ({
+  articleList: articlesData.articles
+});
 const mapDispatchToProps = {
   dispatchLoading: actionCreators.loading,
   dispatchArticles: actionCreators.articlesData.setArticles,
 };
 
-export default connect(null, mapDispatchToProps)(Articles);
+export default connect(mapStateToProps, mapDispatchToProps)(Articles);
