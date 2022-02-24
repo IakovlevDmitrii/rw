@@ -1,73 +1,79 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Switch, Route, useRouteMatch} from "react-router-dom";
+import { connect } from "react-redux";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import { Pagination } from "antd";
 import PropTypes from "prop-types";
 
-// components
-import Article from "../article";
-import Spinner from "../spinner";
+import ArticlePreview from "../article-preview";
+import ArticlePage from "../pages/article-page-n";
 import ErrorIndicator from "../errors/error-indicator";
 
-import ArticlePage from "../pages/article-page";
-
 import realWorldApiService from "../../service";
+import actionCreators from "../../store/action-creators";
 
 import "antd/dist/antd.css";
 import "./pagination.css";
 import styles from "./Articles.module.scss";
 
-function Articles({ token, isLoggedIn}) {
+function Articles({ token, isLoggedIn, dispatchLoading, dispatchArticles }) {
   const { path } = useRouteMatch();
 
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [articleList, setArticleList] = useState([]);
 
-  // каждый раз при изменении номера страницы будем загружать список статей
+  // каждый раз при монтировании компонента
+  // или изменении номера страницы
+  // будем загружать список статей
   const loadArticleList = useCallback(() => {
-    setIsLoading(true);
+    dispatchLoading(true);
 
     realWorldApiService.articles
       .getList(page)
       .then(({ articles, articlesCount }) => {
         setArticleList(articles);
         setCount(articlesCount);
+        dispatchArticles(articles);
       })
       .catch(() => {
         setHasError(true);
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatchLoading(false);
       });
-  }, [page]);
+  }, [page, dispatchLoading, dispatchArticles]);
 
   useEffect(() => loadArticleList(), [loadArticleList]);
-  useEffect( () => () => {
-    setArticleList([]);
-  }, [] );
+  useEffect(
+    () => () => {
+      setArticleList([]);
+    },
+    []
+  );
 
   // при нажатии на лайк
   const onFavoriteArticle = (slug) => {
-
     // в списке статей найдем ту, которой нужно поставить или убрать лайк
-    const index = articleList.findIndex(
-      (article) => article.slug === slug
-    );
+    const index = articleList.findIndex((article) => article.slug === slug);
     const searchedArticle = articleList[index];
-
-    // узнаем, отмечена ли статья лайком
-    const { favorited } = searchedArticle;
+    // узнаем, отмечена ли статья лайком и количество лайков
+    const { favorited, favoritesCount } = searchedArticle;
 
     // имя запроса зависит от значения favorited
     const getRequestName = () => (favorited ? "unfavorite" : "favorite");
 
     // функция для замены значения favorited в выбранной статье
     const toggleFavorited = () => {
-
-      // создадим копию выбранной статьи и заменим в ней значение favorite на противоположное
-      const newArticle = { ...searchedArticle, favorited: !favorited };
+      const newFavoritesCount = favorited ? favoritesCount - 1 : favoritesCount + 1;
+      // создадим копию выбранной статьи и заменим в ней значение
+      // favorite на противоположное
+      // увеличим или уменьшим количество лайков
+      const newArticle = {
+        ...searchedArticle,
+        favorited: !favorited,
+        favoritesCount: newFavoritesCount
+      };
 
       // новый список статей содержит измененную статью
       const newArticleList = [
@@ -76,8 +82,9 @@ function Articles({ token, isLoggedIn}) {
         ...articleList.slice(index + 1),
       ];
 
-      // сохраним измененный список статей в state
+      // сохраним измененный список статей
       setArticleList(newArticleList);
+      dispatchArticles(newArticleList);
     };
 
     // отправим запрос на изменение лайка
@@ -85,7 +92,6 @@ function Articles({ token, isLoggedIn}) {
       .then((res) => {
         // если запрос прошел успешно
         if (res) {
-
           // заменим лайк в статье
           toggleFavorited();
         } else {
@@ -98,29 +104,21 @@ function Articles({ token, isLoggedIn}) {
       });
   };
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
-  if (hasError) {
-    return <ErrorIndicator />;
-  }
-
   const listToShow = articleList.map((article) => (
-    <Article
-      isPreview
-      content={article}
-      token={token}
+    <ArticlePreview
       isLoggedIn={isLoggedIn}
-      editable={false}
+      content={article}
       onFavoriteArticle={onFavoriteArticle}
       key={article.slug}
     />
   ));
 
-  return(
-    <Switch>
+  if (hasError) {
+    return <ErrorIndicator />;
+  }
 
+  return (
+    <Switch>
       <Route path={`${path}/:slug`}>
         <ArticlePage />
       </Route>
@@ -130,6 +128,7 @@ function Articles({ token, isLoggedIn}) {
           <div className={styles.container}>
             <div className={styles.content}>
               {listToShow}
+
               <div className={styles.pagination}>
                 <Pagination
                   current={page}
@@ -145,18 +144,24 @@ function Articles({ token, isLoggedIn}) {
           </div>
         </section>
       </Route>
-
     </Switch>
-  )
+  );
 }
 
 Articles.propTypes = {
   token: PropTypes.string,
   isLoggedIn: PropTypes.bool.isRequired,
-}
+  dispatchLoading: PropTypes.func.isRequired,
+  dispatchArticles: PropTypes.func.isRequired,
+};
 
 Articles.defaultProps = {
   token: "",
 };
 
-export default Articles;
+const mapDispatchToProps = {
+  dispatchLoading: actionCreators.loading,
+  dispatchArticles: actionCreators.articlesData.setArticles,
+};
+
+export default connect(null, mapDispatchToProps)(Articles);

@@ -12,10 +12,17 @@
 //}
 .container {
   @extend %container;
+
+  position: relative;
+
 }
 
 .content {
   padding-top: 2rem;
+
+  &:first-child {
+    padding-top: 0;
+  }
 
   article {
     @extend %container_border;
