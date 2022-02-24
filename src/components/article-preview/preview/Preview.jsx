@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import favoriteTrueImage from "./images/favorite-true.png";
@@ -45,7 +46,9 @@ function Preview({
     <div className={styles.article}>
       <div className={styles.info}>
         <div className={styles.title}>
-          <h2>{title}</h2>
+          <Link to={`articles/${slug}`}>
+            <h2>{title}</h2>
+          </Link>
           <div className={styles.favorites}>
             {favoriteButton}
             <span className={styles.favoritesCount}>{favoritesCount}</span>

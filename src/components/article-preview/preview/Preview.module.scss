@@ -1,0 +1,15 @@
+@import '../../app/styles/article.module';
+
+.article {
+  border-bottom: 1px solid $brand_primary__4;
+
+  @media only screen and ($screen-sm) {
+    border-bottom: 0
+  }
+}
+
+.description {
+  p {
+    color: rgba(0, 0, 0, 0.75);
+  }
+}
