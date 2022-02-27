@@ -1,71 +1,90 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
-import {
-  Switch,
-  Route,
-  useRouteMatch,
-  useParams
-} from "react-router-dom";
+import { Switch, Route, Redirect, useRouteMatch, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
-// api service
 import realWorldApiService from "../../../service";
+import actionCreators from "../../../store/action-creators";
 
-// components
 import Article from "../../article";
 import EditArticlePage from "../edit-article-page";
-import Spinner from "../../spinner";
 import ErrorIndicator from "../../errors/error-indicator";
 
 import styles from "./ArticlePage.module.scss";
 
-function ArticlePage({ username, token, isLoggedIn }) {
+function ArticlePage({ username, token, isLoggedIn, dispatchLoading }) {
   const { slug } = useParams();
   const { path } = useRouteMatch();
 
   const [article, setArticle] = useState({});
   const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isArticleDeleted, setIsArticleDeleted] = useState(false);
 
-  // каждый раз, прежде чем отобразить статью будем ее получать с сервера
+  // каждый раз при монтировании компонента
+  // будем загружать  статью
   const loadArticle = useCallback(() => {
+    dispatchLoading(true);
+
     realWorldApiService.articles
       .getOne(slug)
       .then((articleContent) => {
-
-        // полученную статью сохраним в article
         setArticle(articleContent);
       })
       .catch(() => {
         setHasError(true);
       })
       .finally(() => {
-        setIsLoading(false);
+        dispatchLoading(false);
       });
-  }, [slug, setArticle]);
+  }, [slug, setArticle, dispatchLoading]);
 
   useEffect(() => loadArticle(), [loadArticle]);
-  useEffect(() => () => setArticle({}), []);
 
+  // при нажатии на лайк
   const onFavoriteArticle = () => {
-
-    // узнаем, отмечена ли статья лайком
-    const { favorited } = article;
-    // setIsLoading(true);
+    // узнаем, отмечена ли статья лайком и количество лайков
+    const { favorited, favoritesCount } = article;
 
     // имя запроса зависит от значения favorited
-    const getRequestName = () => (favorited ? "unfavorite" : "favorite");
+    const requestName = favorited ? "unfavorite" : "favorite";
+
+    // функция для замены значения favorited и favoritesCount в статье
+    const toggleFavorited = () => {
+      const newFavoritesCount = favorited
+        ? favoritesCount - 1
+        : favoritesCount + 1;
+
+      setArticle(() => ({
+        ...article,
+        favorited: !favorited,
+        favoritesCount: newFavoritesCount,
+      }));
+    };
 
     // отправим запрос на изменение лайка
-    realWorldApiService.articles[getRequestName()](token, slug)
+    realWorldApiService.articles[requestName](token, slug)
       .then((res) => {
         // если запрос прошел успешно
         if (res) {
-
           // заменим лайк в статье
-          setArticle({...article, favorited: !favorited})
+          toggleFavorited();
         } else {
           // если запрос не прошел
+          setHasError(true);
+        }
+      })
+      .catch(() => {
+        setHasError(true);
+      });
+  };
+
+  const onDeleteArticle = () => {
+    realWorldApiService.articles
+      .delete(token, slug)
+      .then((res) => {
+        if (res) {
+          setIsArticleDeleted(true);
+        } else {
           setHasError(true);
         }
       })
@@ -87,53 +106,54 @@ function ArticlePage({ username, token, isLoggedIn }) {
     contentToChange.tagList = [{ value: "" }];
   }
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
   if (hasError) {
     return <ErrorIndicator />;
   }
 
-  return (
-    <Switch>
-      <Route path={`${path}/edit`}>
-        <EditArticlePage slug={slug} contentToChange={contentToChange} />
-      </Route>
+  if (article.slug) {
+    return (
+      <Switch>
+        <Route path={`${path}/edit`}>
+          <EditArticlePage slug={slug} contentToChange={contentToChange} />
+        </Route>
+        <Route path={path}>
+          {isArticleDeleted ? (
+            <Redirect to="/articles" />
+          ) : (
+            <section>
+              <div className={styles.container}>
+                <Article
+                  content={article}
+                  isLoggedIn={isLoggedIn}
+                  editable={username === article.author.username}
+                  onFavoriteArticle={onFavoriteArticle}
+                  onDeleteArticle={onDeleteArticle}
+                />
+              </div>
+            </section>
+          )}
+        </Route>
+      </Switch>
+    );
+  }
 
-      <Route path={path}>
-        <section className={styles.section}>
-          <div className={styles.container}>
-            <Article
-              isPreview={false}
-              content={article}
-              token={token}
-              isLoggedIn={isLoggedIn}
-              editable={username === article.author.username}
-              onFavoriteArticle={onFavoriteArticle}
-            />
-          </div>
-        </section>
-      </Route>
-    </Switch>
-  );
+  return null;
 }
 
 ArticlePage.propTypes = {
-  username: PropTypes.string,
-  token: PropTypes.string,
-  isLoggedIn: PropTypes.bool.isRequired
-};
-
-ArticlePage.defaultProps = {
-  username: "",
-  token: ""
+  username: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  dispatchLoading: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ authentication }) => ({
   username: authentication.user.username,
   token: authentication.user.token,
-  isLoggedIn: authentication.isLoggedIn
+  isLoggedIn: authentication.isLoggedIn,
 });
+const mapDispatchToProps = {
+  dispatchLoading: actionCreators.loading,
+};
 
-export default connect(mapStateToProps)(ArticlePage);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticlePage);

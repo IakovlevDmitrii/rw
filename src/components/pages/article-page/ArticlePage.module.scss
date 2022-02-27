@@ -1,9 +1,5 @@
 @import '../../app/styles/const.module';
 
-.section {
-   padding-top: 2rem;
-}
-
 .container {
    @extend %container;
    @extend %container_border;
