@@ -61,14 +61,22 @@ function Preview({
 }
 
 Preview.propTypes = {
-  slug: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  slug: PropTypes.string,
+  title: PropTypes.string,
   isLoggedIn: PropTypes.bool.isRequired,
   onFavoriteArticle: PropTypes.func.isRequired,
-  favorited: PropTypes.bool.isRequired,
-  favoritesCount: PropTypes.number.isRequired,
-  tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
-  description: PropTypes.string.isRequired,
+  favorited: PropTypes.bool,
+  favoritesCount: PropTypes.number,
+  tagList: PropTypes.arrayOf(PropTypes.string),
+  description: PropTypes.string,
 };
 
+Preview.defaultProps = {
+  slug: "",
+  title: "",
+  favorited: false,
+  favoritesCount: 0,
+  tagList: [""],
+  description: "",
+};
 export default Preview;
