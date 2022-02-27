@@ -9,10 +9,24 @@ import PersonDetails from "../person-details";
 import attention from "./images/attention.svg";
 import styles from "./Article.module.scss";
 
-function Article({ content, isLoggedIn, editable, onFavoriteArticle, onDeleteArticle }) {
+function Article({
+  content,
+  isLoggedIn,
+  editable,
+  onFavoriteArticle,
+  onDeleteArticle,
+}) {
   const {
-    author, body, createdAt, description, favorited, favoritesCount, slug, tagList, title
-    } = content;
+    author,
+    body,
+    createdAt,
+    description,
+    favorited,
+    favoritesCount,
+    slug,
+    tagList,
+    title,
+  } = content;
 
   const { url } = useRouteMatch();
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
