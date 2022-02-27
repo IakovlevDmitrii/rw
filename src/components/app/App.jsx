@@ -6,13 +6,13 @@ import PrivateRoute from "../private-route";
 
 import Header from "../header";
 import Articles from "../articles";
-import ArticlePage from "../pages/article-page-n";
+import ArticlePage from "../pages/article-page";
 import NewArticlePage from "../pages/new-article-page";
 import { SignIn, SignUp, EditProfile } from "../authComponents";
 
 import styles from "./styles/app.module.scss";
 
-function App({ isLoggedIn, token }) {
+function App({ isLoggedIn }) {
   return (
     <div className={styles.content}>
       <Header />
@@ -22,7 +22,7 @@ function App({ isLoggedIn, token }) {
         </Route>
 
         <Route path="/articles">
-          <Articles token={token} isLoggedIn={isLoggedIn} />
+          <Articles />
         </Route>
 
         <PrivateRoute path="/new-article" auth={isLoggedIn}>
@@ -48,17 +48,11 @@ function App({ isLoggedIn, token }) {
 }
 
 App.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  token: PropTypes.string,
-};
-
-App.defaultProps = {
-  token: "",
+  isLoggedIn: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = ({ authentication }) => ({
-  isLoggedIn: authentication.isLoggedIn,
-  token: authentication.user.token,
+  isLoggedIn: authentication.isLoggedIn
 });
 
 export default connect(mapStateToProps)(App);
