@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
 import { Pagination } from "antd";
 import PropTypes from "prop-types";
 
 import ArticlePreview from "../article-preview";
-import ArticlePage from "../pages/article-page-n";
 import ErrorIndicator from "../errors/error-indicator";
 
 import realWorldApiService from "../../service";
@@ -15,9 +13,13 @@ import "antd/dist/antd.css";
 import "./pagination.css";
 import styles from "./Articles.module.scss";
 
-function Articles({ token, articleList, isLoggedIn, dispatchLoading, dispatchArticles }) {
-  const { path } = useRouteMatch();
-
+function Articles({
+  token,
+  isLoggedIn,
+  articleList,
+  dispatchLoading,
+  dispatchArticles,
+}) {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [hasError, setHasError] = useState(false);
@@ -53,9 +55,9 @@ function Articles({ token, articleList, isLoggedIn, dispatchLoading, dispatchArt
     const { favorited, favoritesCount } = searchedArticle;
 
     // имя запроса зависит от значения favorited
-    const getRequestName = () => (favorited ? "unfavorite" : "favorite");
+    const requestName = favorited ? "unfavorite" : "favorite";
 
-    // функция для замены значения favorited в выбранной статье
+    // функция для замены значения favorited и favoritesCount в выбранной статье
     const toggleFavorited = () => {
       const newFavoritesCount = favorited
         ? favoritesCount - 1
@@ -81,7 +83,7 @@ function Articles({ token, articleList, isLoggedIn, dispatchLoading, dispatchArt
     };
 
     // отправим запрос на изменение лайка
-    realWorldApiService.articles[getRequestName()](token, slug)
+    realWorldApiService.articles[requestName](token, slug)
       .then((res) => {
         // если запрос прошел успешно
         if (res) {
@@ -111,37 +113,31 @@ function Articles({ token, articleList, isLoggedIn, dispatchLoading, dispatchArt
   }
 
   return (
-    <Switch>
-      <Route path={`${path}/:slug`}>
-        <ArticlePage />
-      </Route>
+    <section>
+      <div className={styles.container}>
+        <div className={styles.content}>
+          {listToShow}
 
-      <Route path={path}>
-        <section>
-          <div className={styles.container}>
-            <div className={styles.content}>
-              {listToShow}
-
-              <div className={styles.pagination}>
-                <Pagination
-                  current={page}
-                  onChange={(pageNumber) => setPage(pageNumber)}
-                  total={count}
-                  hideOnSinglePage
-                  pageSize="5"
-                  size="small"
-                  showSizeChanger={false}
-                />
-              </div>
-            </div>
+          <div className={styles.pagination}>
+            <Pagination
+              current={page}
+              onChange={(pageNumber) => setPage(pageNumber)}
+              total={count}
+              hideOnSinglePage
+              pageSize="5"
+              size="small"
+              showSizeChanger={false}
+            />
           </div>
-        </section>
-      </Route>
-    </Switch>
+        </div>
+      </div>
+    </section>
   );
 }
 
 Articles.propTypes = {
+  token: PropTypes.string,
+  isLoggedIn: PropTypes.bool.isRequired,
   articleList: PropTypes.arrayOf(
     PropTypes.shape({
       author: PropTypes.shape({
@@ -158,8 +154,6 @@ Articles.propTypes = {
       title: PropTypes.string,
     })
   ),
-  token: PropTypes.string,
-  isLoggedIn: PropTypes.bool.isRequired,
   dispatchLoading: PropTypes.func.isRequired,
   dispatchArticles: PropTypes.func.isRequired,
 };
@@ -168,24 +162,26 @@ Articles.defaultProps = {
   token: "",
   articleList: [
     {
-    author: {
-      image: "",
-      username: "",
+      author: {
+        image: "",
+        username: "",
+      },
+      body: "",
+      createdAt: "",
+      description: "",
+      favorited: false,
+      favoritesCount: 0,
+      slug: "",
+      tagList: [""],
+      title: "",
     },
-    body: "",
-    createdAt: "",
-    description: "",
-    favorited:false,
-    favoritesCount: 0,
-    slug: "",
-    tagList: [''],
-    title: "",
-  }
-  ]
+  ],
 };
 
-const mapStateToProps = ({ articlesData }) => ({
-  articleList: articlesData.articles
+const mapStateToProps = ({ authentication, articlesData }) => ({
+  token: authentication.user.token,
+  isLoggedIn: authentication.isLoggedIn,
+  articleList: articlesData.articles,
 });
 const mapDispatchToProps = {
   dispatchLoading: actionCreators.loading,
