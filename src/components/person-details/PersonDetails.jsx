@@ -1,30 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 import styles from "./PersonDetails.module.scss";
 
-const PersonDetails = ({ name, date, src, alt }) => (
-   <div className={styles.person}>
+function PersonDetails({ name, date, src }) {
+  return (
+    <div className={styles.person}>
       <div className={styles.info}>
-         <div className={styles.name}>
-            {name}
-         </div>
-         {date && ( <span>{date}</span> )}
+        <div className={styles.name}>{name}</div>
+        {date && <span>{date}</span>}
       </div>
       <div className={styles.image}>
-         <img src={src} alt={alt} />
+        <img src={src} alt="user's avatar" />
       </div>
-   </div>
-);
+    </div>
+  );
+}
 
 PersonDetails.propTypes = {
-   name: PropTypes.string.isRequired,
-   date: PropTypes.string,
-   src: PropTypes.string.isRequired,
-   alt: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  date: PropTypes.string,
+  src: PropTypes.string.isRequired,
 };
 
 PersonDetails.defaultProps = {
-   date: '',
+  date: "",
 };
 
 export default PersonDetails;

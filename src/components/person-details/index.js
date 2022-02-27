@@ -1,3 +1,3 @@
-import PersonDetails from './PersonDetails';
+import PersonDetails from "./PersonDetails";
 
 export default PersonDetails;
