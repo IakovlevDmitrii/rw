@@ -1,3 +1,3 @@
-import NewArticlePage from './NewArticlePage';
+import NewArticlePage from "./NewArticlePage";
 
 export default NewArticlePage;

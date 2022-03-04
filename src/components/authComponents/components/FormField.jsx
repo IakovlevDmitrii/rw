@@ -14,7 +14,7 @@ function FormField({
   labelBehind,
   extraClassName,
   id,
-  autocomplete
+  autocomplete,
 }) {
   const getSubInput = (inputName) =>
     errors[inputName] && <span>{errors[inputName].message}</span>;
@@ -65,7 +65,7 @@ FormField.propTypes = {
   labelBehind: PropTypes.bool,
   extraClassName: PropTypes.string,
   id: PropTypes.string,
-  autocomplete: PropTypes.string
+  autocomplete: PropTypes.string,
 };
 
 FormField.defaultProps = {
@@ -73,7 +73,7 @@ FormField.defaultProps = {
   labelBehind: false,
   extraClassName: "",
   id: null,
-  autocomplete: 'off'
+  autocomplete: "off",
 };
 
 export default FormField;

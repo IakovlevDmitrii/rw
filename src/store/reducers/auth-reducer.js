@@ -1,4 +1,4 @@
-import actionTypes from '../actions-types';
+import actionTypes from "../actions-types";
 
 const { LOG_OUT, UPDATE_USER } = actionTypes.authentication;
 
@@ -7,6 +7,7 @@ const initialState = {
   isLoggedIn: false,
 };
 
+// eslint-disable-next-line default-param-last
 const authentication = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_USER:

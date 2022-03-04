@@ -33,7 +33,7 @@
 .title {
   display: flex;
   justify-content: space-between;
-  height: 2.4rem;
+  max-height: 2.4rem;
   overflow: hidden;
 
   @media only screen and ($screen-sm) {

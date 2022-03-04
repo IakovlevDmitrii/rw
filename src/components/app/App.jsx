@@ -48,11 +48,11 @@ function App({ isLoggedIn }) {
 }
 
 App.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ authentication }) => ({
-  isLoggedIn: authentication.isLoggedIn
+  isLoggedIn: authentication.isLoggedIn,
 });
 
 export default connect(mapStateToProps)(App);

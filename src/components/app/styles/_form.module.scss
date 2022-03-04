@@ -1,9 +1,7 @@
 @import './const.module';
 
 .section {
-  padding: 2rem 0 5rem;
-  @media only screen and ($screen-sm) {padding-top: 2.5rem;}
-  @media only screen and ($screen-md) {padding-top: 3rem;}
+  padding: 0 0 5rem;
 }
 
 .container {

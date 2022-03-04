@@ -1,6 +1,7 @@
-import actionTypes from '../actions-types';
+import actionTypes from "../actions-types";
 
-const { SET_SLUG, SET_ARTICLE, NEW_ARTICLE_CREATED, CLEAR_ARTICLE_DATA } = actionTypes.articleData;
+const { SET_SLUG, SET_ARTICLE, NEW_ARTICLE_CREATED, CLEAR_ARTICLE_DATA } =
+  actionTypes.articleData;
 
 const setSlug = (slug) => ({
   type: SET_SLUG,

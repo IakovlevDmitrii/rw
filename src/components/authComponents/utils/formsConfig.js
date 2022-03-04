@@ -5,7 +5,7 @@ const formConfig = {
       label: "Email address",
       placeholder: "Email address",
       type: "email",
-      autocomplete: "off"
+      autocomplete: "off",
     },
 
     {
@@ -13,7 +13,7 @@ const formConfig = {
       label: "Password",
       placeholder: "Password",
       type: "password",
-      autocomplete: "true"
+      autocomplete: "true",
     },
   ],
 

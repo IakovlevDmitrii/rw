@@ -114,7 +114,11 @@ function ArticlePage({ username, token, isLoggedIn, dispatchLoading }) {
     return (
       <Switch>
         <Route path={`${path}/edit`}>
-          <EditArticlePage slug={slug} contentToChange={contentToChange} />
+          {article.author.username !== username ? (
+            <Redirect to={`/articles/${slug}`} />
+          ) : (
+            <EditArticlePage slug={slug} contentToChange={contentToChange} />
+          )}
         </Route>
         <Route path={path}>
           {isArticleDeleted ? (
