@@ -21,8 +21,10 @@ class RealWorldApiService {
   };
 
 // BASE_URL = 'https://conduit.productionready.io/api';
-  BASE_URL = "http://kata.academy:8022/api";
-// BASE_URL = 'https://api.realworld.io/api';
+//   BASE_URL = "http://kata.academy:8022/api";
+  BASE_URL = "https://kata.academy:8021/api";
+
+  // BASE_URL = 'https://api.realworld.io/api';
 
 // BASE_URL = 'https://cirosantilli-realworld-express.herokuapp.com/api';
 
